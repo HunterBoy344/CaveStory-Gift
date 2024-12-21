@@ -291,10 +291,16 @@
 	  if (Module.SDL2.audioContext.state == 'running') {
 	      document.getElementById('canvas').removeEventListener('click', resumeAudio);
 	      document.removeEventListener('keydown', resumeAudio);
+        ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'touchenter', 'touchleave'].forEach((val) => {
+          window.removeEventListener(val, resumeAudio)
+        })
 	  }
       }
       document.getElementById('canvas').addEventListener('click', resumeAudio);
       document.addEventListener('keydown', resumeAudio);
+      ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'touchenter', 'touchleave'].forEach((val) => {
+        window.addEventListener(val, resumeAudio)
+      })
     </script>
     <script async type="text/javascript" src="CSE2.js"></script>
     <script src="controls.js"></script>
