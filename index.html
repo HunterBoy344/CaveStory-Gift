@@ -5,7 +5,26 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Cave Story</title>
     <style>
-      html, body {margin: 0; height: 100%; width: 100%; overflow: hidden; background: black; position:relative; line-height: 1;}
+      html,
+      body {
+          position: fixed;
+          overflow: hidden;
+          -webkit-user-select: none;
+          user-select: none;
+          -webkit-touch-callout: none;
+          touch-action: none;
+          cursor: inherit;
+      }
+
+      body {
+          background-color: #000000;
+          color: #FFFFFF;
+          padding: 0;
+          margin: 0;
+          width: 100vw;
+          height: 100vh;
+          font-family: 'Myriad Set Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      }
       textarea.emscripten {display: none; font-family: monospace; width: 80%; }
       div.emscripten { text-align: center; }
       /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
@@ -21,7 +40,7 @@
         justify-content: center;
         align-items: center; 
       }*/
-      canvas.emscripten {
+      #canvas {
         /* border: 0px none;
         object-fit: contain;
         display: block;
@@ -128,27 +147,26 @@
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
 
-    <!-- More shamelessly stolen gamepad code. -->
-    <div id="vk-layer" hidden>
-        <!--<div class="vk-rect vk" data-k="menu">Menu</div>-->
-        <!--<div class="vk-rect vk" data-k="turbo">Turbo</div>-->
-        <div class="vk-rect vk" data-k="l">L</div>
-        <div class="vk-rect vk" data-k="r">R</div>
-        <div class="vk-round vk" data-k="a">A</div>
-        <div class="vk-round vk" data-k="b">B</div>
-        <div class="vk-rect vk" data-k="select">Select</div>
-        <div class="vk-rect vk" data-k="start">Start</div>
-        <div class=" vk" data-k="left">←</div>
-        <div class=" vk" data-k="right">→</div>
-        <div class=" vk" data-k="up">↑</div>
-        <div class=" vk" data-k="down">↓</div>
-        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
-        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
-        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
-        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
-    </div>
-
     <div class="emscripten_border" id="emscripten_border">
+      <!-- More shamelessly stolen gamepad code. -->
+      <div id="vk-layer" hidden>
+          <!--<div class="vk-rect vk" data-k="menu">Menu</div>-->
+          <!--<div class="vk-rect vk" data-k="turbo">Turbo</div>-->
+          <div class="vk-rect vk" data-k="l">L</div>
+          <div class="vk-rect vk" data-k="r">R</div>
+          <div class="vk-round vk" data-k="a">A</div>
+          <div class="vk-round vk" data-k="b">B</div>
+          <div class="vk-rect vk" data-k="select">Select</div>
+          <div class="vk-rect vk" data-k="start">Start</div>
+          <div class=" vk" data-k="left">←</div>
+          <div class=" vk" data-k="right">→</div>
+          <div class=" vk" data-k="up">↑</div>
+          <div class=" vk" data-k="down">↓</div>
+          <div class=" vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
+          <div class=" vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
+          <div class=" vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
+          <div class=" vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
+      </div>
       <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
     </div>
     <!--
