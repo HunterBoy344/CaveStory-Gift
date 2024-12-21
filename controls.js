@@ -15,6 +15,8 @@ const keyConvert = {
 }
 
 var canvas = document.getElementById('canvas')
+var gbaWidth
+var gbaHeight
 
 function initVK() {
     var vks = document.getElementsByClassName('vk')
