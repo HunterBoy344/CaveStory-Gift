@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Cave Story</title>
+    <style>
+      html, body {margin: 0; height: 100%; width: 100%; overflow: hidden; background: black; position:relative; line-height: 1;}
+      textarea.emscripten {display: none; font-family: monospace; width: 80%; }
+      div.emscripten { text-align: center; }
+      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+      /* canvas.emscripten { border: 0px none; background-color: black; height: 100vh; } */
+      div.emscripten_border {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      canvas.emscripten {
+        border: 0px none;
+        object-fit: contain;
+        display: block;
+        height: 100vh !important;
+        width: auto !important;
+        max-width: 100vw !important;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        z-index: -1;
+      }
+
+      /* Gamepad CSS shamelessly stolen directly from 44VBA. */
+      .vk-round {
+          text-align: center;
+          vertical-align: middle;
+          border-radius: 50%;
+          display: inline-block;
+      }
+
+      .vk {
+          color: rgba(0, 0, 0, 0.2);
+          background-color: rgba(255, 255, 255, 0.25);
+          position: absolute;
+          z-index: 1;
+          text-align: center;
+          vertical-align: middle;
+          display: inline-block;
+      }
+
+      .vk-hide {
+          background-color: transparent !important
+      }
+
+      .vk-touched {
+          background-color: rgba(255, 255, 255, 0.75) !important
+      }
+
+      #vk-layer {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 3;
+          touch-action: none;
+      }
+
+      .spinner {
+        height: 50px;
+        width: 50px;
+        margin: 0px auto;
+        -webkit-animation: rotation .8s linear infinite;
+        -moz-animation: rotation .8s linear infinite;
+        -o-animation: rotation .8s linear infinite;
+        animation: rotation 0.8s linear infinite;
+        border-left: 10px solid rgb(0,150,240);
+        border-right: 10px solid rgb(0,150,240);
+        border-bottom: 10px solid rgb(0,150,240);
+        border-top: 10px solid rgb(100,0,200);
+        border-radius: 100%;
+        background-color: rgb(200,100,250);
+      }
+      @-webkit-keyframes rotation {
+        from {-webkit-transform: rotate(0deg);}
+        to {-webkit-transform: rotate(360deg);}
+      }
+      @-moz-keyframes rotation {
+        from {-moz-transform: rotate(0deg);}
+        to {-moz-transform: rotate(360deg);}
+      }
+      @-o-keyframes rotation {
+        from {-o-transform: rotate(0deg);}
+        to {-o-transform: rotate(360deg);}
+      }
+      @keyframes rotation {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+      }
+
+  .content {
+    padding-left:0%;
+    padding-right:0%;
+  }
+
+@media screen and (max-width: 900px) {
+  .content {
+    padding-left:0%;
+    padding-right:0%;
+  }
+}
+* { margin:0; padding:0; }
+
+    </style>
+  </head>
+  <body>
+   <!--
+   <hr/>
+   -->
+    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>emscripten</strong></center></figure>
+    <div class="emscripten" id="status">Downloading...</div>
+    <div class="emscripten">
+      <progress value="0" max="100" id="progress" hidden=1></progress>  
+    </div>
+
+    <!-- More shamelessly stolen gamepad code. -->
+    <div id="vk-layer">
+        <!--<div class="vk-rect vk" data-k="menu">Menu</div>-->
+        <!--<div class="vk-rect vk" data-k="turbo">Turbo</div>-->
+        <div class="vk-rect vk" data-k="l">L</div>
+        <div class="vk-rect vk" data-k="r">R</div>
+        <div class="vk-round vk" data-k="a">A</div>
+        <div class="vk-round vk" data-k="b">B</div>
+        <div class="vk-rect vk" data-k="select">Select</div>
+        <div class="vk-rect vk" data-k="start">Start</div>
+        <div class=" vk" data-k="left">←</div>
+        <div class=" vk" data-k="right">→</div>
+        <div class=" vk" data-k="up">↑</div>
+        <div class=" vk" data-k="down">↓</div>
+        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
+        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
+        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
+        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
+    </div>
+
+    <div class="emscripten_border">
+      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+    </div>
+    <!--
+    <hr/>
+    <div class="emscripten">
+      <input type="checkbox" id="resize">Resize canvas
+      <input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer
+      &nbsp;&nbsp;&nbsp;
+      <input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, 
+                                                                                document.getElementById('resize').checked)">
+    </div>
+    
+    <hr/>
+    <textarea class="emscripten" id="output" rows="8"></textarea>
+    <hr>
+    -->
+	<br/>
+    <script type='text/javascript'>
+      document.addEventListener("DOMContentLoaded", event => {
+        // we can move only if we are not in a browser's tab
+        let isBrowser = matchMedia("(display-mode: browser)").matches;
+        if (!isBrowser) {
+          window.resizeTo(
+            800 + (window.outerWidth - window.innerWidth),
+            600 + (window.outerHeight - window.innerHeight)
+        );
+        }
+      });
+
+      document.addEventListener("keydown", function(event){
+        if (event.key == "1") {
+          if (!isBrowser) {
+            window.resizeTo(
+              640 + (window.outerWidth - window.innerWidth),
+              480 + (window.outerHeight - window.innerHeight)
+            );
+          }
+        }
+        if (event.key == "2") {
+          if (!isBrowser) {
+            window.resizeTo(
+              800 + (window.outerWidth - window.innerWidth),
+              600 + (window.outerHeight - window.innerHeight)
+            );
+          }
+        }
+        if (event.key == "3") {
+          if (!isBrowser) {
+            window.resizeTo(
+              960 + (window.outerWidth - window.innerWidth),
+              720 + (window.outerHeight - window.innerHeight)
+            );
+          }
+        }
+      });
+      var statusElement = document.getElementById('status');
+      var progressElement = document.getElementById('progress');
+      var spinnerElement = document.getElementById('spinner');
+      var Module = {
+        preRun: [],
+        postRun: [],
+        print: (function() {
+          var element = document.getElementById('output');
+          if (element) element.value = ''; // clear browser cache
+          return function(text) {
+            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+            // These replacements are necessary if you render to raw HTML
+            //text = text.replace(/&/g, "&amp;");
+            //text = text.replace(/</g, "&lt;");
+            //text = text.replace(/>/g, "&gt;");
+            //text = text.replace('\n', '<br>', 'g');
+            console.log(text);
+            if (element) {
+              element.value += text + "\n";
+              element.scrollTop = element.scrollHeight; // focus on bottom
+            }
+          };
+        })(),
+        printErr: function(text) {
+          if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+          if (0) { // XXX disabled for safety typeof dump == 'function') {
+            dump(text + '\n'); // fast, straight to the real console
+          } else {
+            console.error(text);
+          }
+        },
+        canvas: (function() {
+          var canvas = document.getElementById('canvas');
+          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+          // application robust, you may want to override this behavior before shipping!
+          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+          return canvas;
+        })(),
+        setStatus: function(text) {
+          if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+          if (text === Module.setStatus.last.text) return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+          Module.setStatus.last.time = now;
+          Module.setStatus.last.text = text;
+          if (m) {
+            text = m[1];
+            progressElement.value = parseInt(m[2])*100;
+            progressElement.max = parseInt(m[4])*100;
+            progressElement.hidden = false;
+            spinnerElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+            if (!text) spinnerElement.hidden = true;
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
+      };
+      Module.setStatus('Downloading...');
+      window.onerror = function() {
+        Module.setStatus('Exception thrown, see JavaScript console');
+        spinnerElement.style.display = 'none';
+        Module.setStatus = function(text) {
+          if (text) Module.printErr('[post-exception status] ' + text);
+        };
+      };
+
+      // Work-around chromium autoplay policy
+      // https://github.com/emscripten-core/emscripten/issues/6511
+      function resumeAudio(e) {
+	  if (typeof Module === 'undefined'
+	      || typeof Module.SDL2 == 'undefined'
+	      || typeof Module.SDL2.audioContext == 'undefined')
+	      return;
+	  if (Module.SDL2.audioContext.state == 'suspended') {
+	      Module.SDL2.audioContext.resume();
+	  }
+	  if (Module.SDL2.audioContext.state == 'running') {
+	      document.getElementById('canvas').removeEventListener('click', resumeAudio);
+	      document.removeEventListener('keydown', resumeAudio);
+	  }
+      }
+      document.getElementById('canvas').addEventListener('click', resumeAudio);
+      document.addEventListener('keydown', resumeAudio);
+    </script>
+    <script async type="text/javascript" src="CSE2.js"></script>
+    <script src="controls.js"></script>
+  </body>
+</html>
+
+
