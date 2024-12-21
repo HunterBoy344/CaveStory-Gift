@@ -187,6 +187,10 @@ document.getElementById('vk-layer').ontouchstart = (e) => {
     e.preventDefault()
 }
 
+document.getElementById('emscripten_border').ontouchstart = (e) => {
+    e.preventDefault()
+}
+
 
 // god I hope this works
 function simulateKeyEvent(eventType, keyCode, charCode) {
