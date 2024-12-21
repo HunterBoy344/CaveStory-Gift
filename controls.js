@@ -149,9 +149,9 @@ function handleTouch(event) {
             }
         }
     }
-    if (keyState['menu'][2]) {
+    /* if (keyState['menu'][2]) {
         // setPauseMenu(true)
-    }
+    }* /
     /*if (keyState['turbo'][2] != keyState['turbo'][1]) {
         setTurboMode(keyState['turbo'][2])
     }*/
