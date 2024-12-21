@@ -104,7 +104,7 @@ function adjustSize() {
     gbaWidth = 800 * scaleFator
     gbaHeight = 600 * scaleFator
     l += (window.innerWidth - gbaWidth) / 2;
-    canvas.style = 'width:' + gbaWidth + 'px;height:' + gbaHeight + 'px;left:' + l + 'px;'
+    // canvas.style = 'width:' + gbaWidth + 'px;height:' + gbaHeight + 'px;left:' + l + 'px;'
     adjustVKLayout()
 }
 

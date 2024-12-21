@@ -20,6 +20,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        z-index: -1;
       }
       canvas.emscripten {
         border: 0px none;
@@ -127,7 +128,7 @@
     </div>
 
     <!-- More shamelessly stolen gamepad code. -->
-    <div id="vk-layer">
+    <div id="vk-layer" hidden>
         <!--<div class="vk-rect vk" data-k="menu">Menu</div>-->
         <!--<div class="vk-rect vk" data-k="turbo">Turbo</div>-->
         <div class="vk-rect vk" data-k="l">L</div>
