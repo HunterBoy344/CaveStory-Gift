@@ -95,16 +95,16 @@ function adjustSize() {
     var gbaMaxHeight = window.innerHeight - 20
     var l = 0
     var w = gbaMaxWidth
-    var h = w / 240 * 160
+    var h = w / 800 * 600
     if (h > gbaMaxHeight) {
         h = gbaMaxHeight
-        w = h / 160 * 240
+        w = h / 600 * 800
     }
-    var scaleFator = (w / 240) // | 0
-    gbaWidth = 240 * scaleFator
-    gbaHeight = 160 * scaleFator
+    var scaleFator = (w / 800) // | 0
+    gbaWidth = 800 * scaleFator
+    gbaHeight = 600 * scaleFator
     l += (window.innerWidth - gbaWidth) / 2;
-    //canvas.style = 'width:' + gbaWidth + 'px;height:' + gbaHeight + 'px;left:' + l + 'px;'
+    canvas.style = 'width:' + gbaWidth + 'px;height:' + gbaHeight + 'px;left:' + l + 'px;'
     adjustVKLayout()
 }
 
