@@ -14,6 +14,8 @@ const keyConvert = {
     "l" : 65
 }
 
+var canvas = document.getElementById('canvas')
+
 function initVK() {
     var vks = document.getElementsByClassName('vk')
     for (var i = 0; i < vks.length; i++) {
@@ -104,7 +106,7 @@ function adjustSize() {
     gbaWidth = 800 * scaleFator
     gbaHeight = 600 * scaleFator
     l += (window.innerWidth - gbaWidth) / 2;
-    // canvas.style = 'width:' + gbaWidth + 'px;height:' + gbaHeight + 'px;left:' + l + 'px;'
+    canvas.style = 'width:' + gbaWidth + 'px;height:' + gbaHeight + 'px;left:' + l + 'px;'
     adjustVKLayout()
 }
 
