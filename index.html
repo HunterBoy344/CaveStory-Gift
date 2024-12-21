@@ -190,6 +190,13 @@
     -->
 	<br/>
     <script type='text/javascript'>
+      Object.defineProperty(document, 'title', {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: document.title
+      });
+
       /* document.addEventListener("DOMContentLoaded", event => {
         // we can move only if we are not in a browser's tab
         let isBrowser = matchMedia("(display-mode: browser)").matches;
