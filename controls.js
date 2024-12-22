@@ -77,6 +77,7 @@ function adjustVKLayout() {
     keyState['right'][0].style = makeVKStyle(offTop + vkh, offLeft + vkw * 2, vkw, vkh, fontSize)
     abSize = vkw * 1.3
     keyState['a'][0].style = makeVKStyle(offTop + vkh - baseSize * 0.5, window.innerWidth - abSize, abSize, abSize, fontSize)
+    keyState['a+b'][0].style = makeVKStyle(offTop + vkh - baseSize * 0.25, window.innerWidth - abSize * 1.2, abSize, abSize, fontSize)
     keyState['b'][0].style = makeVKStyle(offTop + vkh, window.innerWidth - abSize * 2.4, abSize, abSize, fontSize)
 
     vkh = baseSize * 0.5
@@ -149,6 +150,9 @@ function handleTouch(event) {
                 } else if (k == 'dr') {
                     keyState['down'][2] = 1
                     keyState['right'][2] = 1
+                } else if (k == 'a+b') {
+                    keyState['a'][2] = 1
+                    keyState['b'][2] = 1
                 }
             }
         }
