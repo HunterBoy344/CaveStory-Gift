@@ -77,8 +77,8 @@ function adjustVKLayout() {
     keyState['right'][0].style = makeVKStyle(offTop + vkh, offLeft + vkw * 2, vkw, vkh, fontSize)
     abSize = vkw * 1.3
     keyState['a'][0].style = makeVKStyle(offTop + vkh - baseSize * 0.5, window.innerWidth - abSize, abSize, abSize, fontSize)
-    keyState['a+b'][0].style = makeVKStyle(offTop + vkh, window.innerWidth - abSize, abSize, abSize, fontSize)
-    keyState['b'][0].style = makeVKStyle(offTop + vkh, window.innerWidth - abSize * 2.4, abSize, abSize, fontSize)
+    keyState['a+b'][0].style = makeVKStyle(offTop + vkh - baseSize * 0.5, window.innerWidth - abSize * 1.2, abSize, abSize, fontSize)
+    keyState['b'][0].style = makeVKStyle(offTop + vkh - baseSize * 0.5, window.innerWidth - abSize * 2.4, abSize, abSize, fontSize)
 
     vkh = baseSize * 0.5
     vkw = baseSize * 3
